@@ -55,9 +55,10 @@ int main(void){
     }
     cout<<"Before sorting : ";
     printArray(arr,num);
+    
     quickSort(arr,0,num);
     cout<<"After sorting : ";
-    printArray(arr,num);
+    printArray(arr,num);    
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end - start);
     cout<<"Time taken : ";
