@@ -1,75 +1,63 @@
-#include<iostream>
+#include <iostream>
+#include <list>
 using namespace std;
-class node{
+
+class Graph {
+    int nodeNum;
+    list<int>* adjacent;
+    bool* visited;
+
 public:
-    int info;
-    node* leftSide;
-    node* rightSide;
-    node(){
-        leftSide=NULL;
-        rightSide=NULL;
-        info=0;
+    Graph(int vertices) {
+        nodeNum = vertices;
+        adjacent = new list<int>[vertices];
     }
-    node(int num){
-        leftSide=NULL;
-        rightSide=NULL;
-        info=num;
+
+    void addEdge(int start, int end) {
+        adjacent[start].push_back(end);
+        adjacent[end].push_back(start);
     }
-};
-class tree{
-    node* start=NULL;
-public:
-    tree(int arr[],int no_element){
-        for(int i=0;i<no_element;i++){
-            insert_node(arr[i]);
-        }
-    }
-    void insert_node(int num){
-        node* newNode=new node(num);
-        if(newNode==NULL){
-            cout<<"Over Flow"<<endl;
-            return;
-        }
-        if(start==NULL){
-            start=newNode;
-            return;
-        }else{
-            node* ptr=start;
-            while(ptr!=NULL){
-                if(ptr->leftSide==NULL){
-                    ptr->leftSide=newNode; 
-                    return;
-                }else if(ptr->rightSide==NULL){
-                    ptr->rightSide=newNode;
-                    return;
-                }else{
-                    ptr=ptr->leftSide;
+
+    void BFS(int source) {
+        visited = new bool[nodeNum];
+        for (int i = 0; i < nodeNum; i++)
+            visited[i] = false;
+
+        list<int> queue;
+
+        visited[source] = true;
+        queue.push_back(source);
+
+        list<int>::iterator i;
+        cout<<"The search direction through : "<<endl;
+        while (queue.empty()!=true) {
+            int currVertex = queue.front();
+            cout << currVertex << ", ";
+            queue.pop_front();
+            
+            for (i = adjacent[currVertex].begin(); i != adjacent[currVertex].end(); ++i) {
+                int adjVertex = *i;
+                if (visited[adjVertex]!=true) {
+                    visited[adjVertex] = true;
+                    queue.push_back(adjVertex);
                 }
             }
-            ptr=newNode;
-        }
-    }
-    void BFS(int no_nodes){
-        list node;
-        node* nodeList[no_nodes];
-        node* ptr;
-        count=0;
-        nodeList[count]=ptr;
-        while(ptr!=NULL){
-            nodeList[count]
         }
     }
 };
-int main(){
-    int insert_info,no_nodes,inserter,d,selector=1;
-    cout<<"Enter the number of nodes to be created : "<<endl;
-    cin>>no_nodes;
-    int a[no_nodes];
-    cout<<"Enter the number to be inserted in the list : "<<endl;
-    for(int i=0;i<no_nodes;i++){
-        cin>>a[i];
-    }
-    tree t(a,no_nodes);
-    cout<<"Inserted nodes";
+int main() {
+    Graph graph1(6);
+    graph1.addEdge(0,1);
+    graph1.addEdge(0,2);
+    graph1.addEdge(1,2);
+    graph1.addEdge(2,0);
+    graph1.addEdge(2,3);
+    graph1.addEdge(3,3);
+    graph1.addEdge(4,5);
+    graph1.addEdge(1,5);
+    graph1.addEdge(2,5);
+    graph1.addEdge(3,4);
+
+    graph1.BFS(2);
     return 0;
 }

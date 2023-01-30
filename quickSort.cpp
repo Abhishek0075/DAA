@@ -49,14 +49,13 @@ int main(void){
     srand ( time(NULL) );
     int num= 5 + rand() % 10;
     int arr[num];
-    for (int i = 0; i < num; i++)
-    {
+    for (int i = 0; i < num; i++){
         arr[i]=4 + rand() % 30;
     }
     cout<<"Before sorting : ";
     printArray(arr,num);
     
-    quickSort(arr,0,num);
+    quickSort(arr,0,num); 
     cout<<"After sorting : ";
     printArray(arr,num);    
     auto end = high_resolution_clock::now();
