@@ -24,15 +24,27 @@ def indexOfSelectCol(zj,cj) :
     return pos
 
 def createRatio(solu,selectCol) : 
-    result = [solu[i]/selectCol[i] for i in range(len(solu))]
+    result = [solu[i]/float(selectCol[i]) for i in range(len(solu))]
     return result
 
 def indexOfSelectRow(l) : 
     pos = l.index(min([i for i in l if i > 0]))
     return pos
 
+def operationsInMatrix(matrix,row,col) :
+    divider = float(matrix[row][col])
+    # print("Row to be divided by ",divider,matrix[row])
+    matrix[row] /= divider
+    
+    for i in range(len(matrix)) :
+        # print(matrix[i])
+        if(i == row) :
+            continue
+        else :
+            matrix[i] = matrix[i] - matrix[row]*matrix[i][col]
+
 #       Main
-z = np.array([6,4])
+z = np.array([6,4],dtype = float)
 
 signs = []
 solution = []
@@ -57,32 +69,45 @@ solution.append(solution3)
 
 l = [c1,c2,c3]
 
-constraints = np.array(l)
-signs = np.array([signs])
-solution = np.array([solution])
+constraints = np.array(l,dtype = float)
+signs = np.array([signs],dtype = float)
+solution = np.array([solution],dtype = float)
 
 
-ident = np.identity(len(constraints), dtype = int)
+ident = np.identity(len(constraints), dtype = float)
 solution = solution.transpose()
 final = np.concatenate((constraints, ident, solution), axis = 1)
-print(final)
+# print(final)
 
 cj = np.append(z,[0,0,0])
 cb = [0,0,0]
 
+print("------- Before iterations -------")
+print(final)
+print("Solution : ", solution.transpose())
 
+for i in range(len(cj)-3) :
+    print("------- Iteration",i," -------")
+    zj = createZJ(final,cb)
+    print("zj : ",zj)
+    selectColPos = indexOfSelectCol(zj,cj)
+    # print(final)
+    selectCol = final[:,selectColPos]
+    # print("selectCol : ",selectCol)
 
-zj = createZJ(final,cb)
-selectColPos = indexOfSelectCol(zj,cj)
-# print(final)
-selectCol = final[:,selectColPos]
-# print(selectCol)
+    solu = final[:,len(final[0])-1]
+    # print("Solution : ", solu)
 
-solu = final[:,len(final[0])-1]
-# print(solu)
+    ratio = createRatio(solu,selectCol)
+    print("Ratio : ",ratio)
 
-ratio = createRatio(solu,selectCol)
-print(ratio)
+    selectRowPos = indexOfSelectRow(ratio)
+    # print("selectRow : ",selectRowPos)
 
-selectRowPos = indexOfSelectRow(ratio)
-print(selectRowPos)
+    operationsInMatrix(final, selectRowPos, selectColPos)
+    print(final)
+        
+    cb.pop(selectRowPos)
+    cb.insert(selectRowPos, cj[i])
+    print("Solution : ", solu)
+    # print("Cb : ",cb)
