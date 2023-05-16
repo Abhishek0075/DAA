@@ -4,7 +4,7 @@ def createZJ(l,cb) :
     zj = []
     for i in range(len(l[0])-1) :
         sum = 0
-        for j in range(len(cb)) : 
+        for j in range(len(cb)) :
             # print("l[:,i][j]", l[:,i][j],"cb[j]",cb[j])
             temp = l[:,i][j]*cb[j]
             sum+=temp
